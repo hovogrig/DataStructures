@@ -28,6 +28,7 @@ public:
     void get_tail();
     void get_head();
     int get_index(int);  //return data of index-rd node from list
+    void append(T);     // append element from back of list
 
 private:
     void deallocate();
@@ -105,6 +106,22 @@ void LinkedList<T>::deallocate(){
     }
     delete tmp;
     m_size=0;
+}
+
+template <typename T> 
+void LinkedList<T>::append(T element){ 
+    Node<T>* n = new Node<T>(element);
+    if(m_size==0){ 
+        tail=n;
+        head=n;
+        ++m_size;
+        return;
+    }
+    tail->next=n;
+    n->previous=tail;
+    tail=n;
+    ++m_size;
+    return;
 }
 
 template <typename T>
