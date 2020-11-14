@@ -27,11 +27,14 @@ public:
     void print();
     void get_tail();
     void get_head();
-    int get_index(int);  //return data of index-rd node from list
     void append(T);     // append element from back of list
+    void reverse();     // reversed original list
+    void swap(int,int);   // swaped 2 nodes with indexes
+    void sort();        // order original list (SelectionSort) 
 
 private:
     void deallocate();
+    Node<T>* get_index(int);  //return index-th node from list
 
 private:
     int m_size;
@@ -52,10 +55,46 @@ void LinkedList<T>::print(){
     std::cout<<' '<<std::endl;
 }
 
+template <typename T> 
+void LinkedList<T>::swap(int ind1, int ind2){ 
+    if ((ind1<0 || ind1>=m_size) && (ind2<0 || ind2>=m_size)) { 
+        std::cout<<"index is out of bound"<<std::endl;
+        return;
+    }
+    Node<T>*tmp = this->get_index(ind1);
+    Node<T>*tmp1 = this->get_index(ind2);
+    Node<T>*tmp2 = new Node<T>;
+    tmp2->m_data = tmp->m_data;
+    tmp->m_data = tmp1->m_data;
+    tmp1->m_data = tmp2->m_data;
+    delete tmp2;
+}
+
+template <typename T>
+void LinkedList<T>::reverse(){ 
+    for(int i=0; i<=(this->get_size()/2); ++i){ 
+        this->swap(i,m_size-1-i);
+    }
+}
+
+template <typename T>
+void LinkedList<T>::sort(){ 
+    for (int i = 0; i < m_size; ++i) {
+        int min = i;
+        for(int j =i+1; j<m_size; ++j){ 
+            if((this->get_index(min)->m_data) > (this->get_index(j)->m_data)) {    
+                min = j;
+            }
+        }
+        this->swap(i,min);
+    } 
+}
+
 template <typename T>
 void LinkedList<T>::insert(int index, T num){ 
     if(index < 0){ 
-        std::cout<<"Wrong index"<<std::endl;
+        std::cout<<"index out of bound"<<std::endl;
+        return;
     }
     if(index > m_size) {index = m_size;}    
     Node<T>*tmp=head;
@@ -157,10 +196,9 @@ void LinkedList<T>::remove(T data){
 }
 
 template <typename T>
-int LinkedList<T>::get_index(int index){ 
+Node<T>* LinkedList<T>::get_index(int index){ 
     if(is_empty()) {
-        std::cout<<"Empty list"<<std::endl;
-        return -1;
+        throw std::exception();
     }
     if(index<0 || index>=m_size){ 
         throw std::out_of_range ("Index is out of range");
@@ -171,7 +209,7 @@ int LinkedList<T>::get_index(int index){
         tmp = tmp->next; 
         ++ind;
     }
-    return tmp->m_data;
+    return tmp;
 }
 
 template <typename T>
