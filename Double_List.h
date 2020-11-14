@@ -72,7 +72,7 @@ void LinkedList<T>::swap(int ind1, int ind2){
 
 template <typename T>
 void LinkedList<T>::reverse(){ 
-    for(int i=0; i<=(this->get_size()/2); ++i){ 
+    for(int i=0; i<(this->get_size()/2); ++i){ 
         this->swap(i,m_size-1-i);
     }
 }
